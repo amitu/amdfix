@@ -21,6 +21,11 @@ setup(
     install_requires=[
     ],
     packages=["amdfix"],
+    entry_points={
+        'console_scripts': ['amdfix=amdfix.__main__:main']
+    },
+
+    test_suite='tests',
 
     zip_safe=True,
 )
