@@ -20,6 +20,7 @@ class TestTests(TestCase):
     def test_fixit(self):
         src = """
             import dojo/on
+            import dojo/dom-class
 
             on(window, "resize", function(){
 
@@ -32,8 +33,40 @@ class TestTests(TestCase):
         aeq(
             """
                 define(
-                    ["dojo/on"],
-                    function(on){
+                    ["dojo/on", "dojo/dom-class"],
+                    function(on, domClass){
+
+
+                        on(window, "resize", function(){
+
+                        })
+
+                        return function() {
+                            // this is foo
+                        }
+                    }
+                )
+            """, fixit(src)
+        )
+
+    def test_fixit_as(self):
+        src = """
+            import dojo/on
+            import dojo/dom-class as dclass
+
+            on(window, "resize", function(){
+
+            })
+
+            export function() {
+                // this is foo
+            }
+        """
+        aeq(
+            """
+                define(
+                    ["dojo/on", "dojo/dom-class"],
+                    function(on, dclass){
 
 
                         on(window, "resize", function(){

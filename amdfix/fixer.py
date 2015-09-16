@@ -24,9 +24,13 @@ def fixit(content):
         else:
             if line.startswith("import "):
                 parts = line.split()
-                assert len(parts) in [2]
+                assert len(parts) in [2, 4], "sytnax error"
                 mod = parts[1]
-                modules.append((mod2name(mod), mod))
+                name = mod2name(mod)
+                if len(parts) == 4:
+                    assert parts[2] == "as", "syntax error"
+                    name = parts[3]
+                modules.append((name, mod))
             elif line.startswith("export"):
                 exporting = True
                 exporters.append(line.split(None, 1)[1])
