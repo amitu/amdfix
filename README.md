@@ -19,7 +19,8 @@ Write
 
 ```javascript
 import dojo/dom-class;
-import require dojo/on;
+// above is same as: import dojo/dom-class as domClass;
+import dojo/on;
 
 domClass.add(document.body, "dojorocks");
 on(window, "resize", function(){
