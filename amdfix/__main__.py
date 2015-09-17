@@ -26,6 +26,6 @@ def main():
     args = parser.parse_args()
 
     if args.dir:
-        fixer.fix_file(src=args.source, dst=args.destination)
-    else:
         fixer.fix_dir(src=args.source, dst=args.destination)
+    else:
+        fixer.fix_file(src=args.source, dst=args.destination)

@@ -5,8 +5,8 @@ from amdfix.fixer import fixit, mod2name
 
 
 def aeq(src, dst):
-    src = dedent(src)
-    dst = dedent(dst)
+    src = dedent(src).strip()
+    dst = dedent(dst).strip()
     if src != dst:
         assert src == dst, "expected:\n%s\n----\ngot:\n%s\n" % (src, dst)
 
@@ -35,12 +35,9 @@ class TestTests(TestCase):
                 define(
                     ["dojo/on", "dojo/dom-class"],
                     function(on, domClass){
-
-
                         on(window, "resize", function(){
 
                         })
-
                         return function() {
                             // this is foo
                         }
@@ -67,12 +64,9 @@ class TestTests(TestCase):
                 define(
                     ["dojo/on", "dojo/dom-class"],
                     function(on, dclass){
-
-
                         on(window, "resize", function(){
 
                         })
-
                         return function() {
                             // this is foo
                         }

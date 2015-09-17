@@ -1,4 +1,8 @@
 from textwrap import dedent
+import os
+import sys
+from os.path import join, isdir
+from shutil import copy2
 
 
 def mod2name(mod):
@@ -37,27 +41,54 @@ def fixit(content):
             else:
                 final.append(pre + line)
 
-    return dedent(
-        """
-            define(
-                [%s],
-                function(%s){
-                    %s
-                    return %s
-                }
-            )
-        """
-    ) % (
-        ", ".join('"%s"' % m[1] for m in modules),
-        ", ".join('%s' % m[0] for m in modules),
-        "\n".join(final),
-        "\n".join(exporters)
-    )
+    return (
+        dedent(
+            """
+                define(
+                    [%s],
+                    function(%s){
+                        %s
+                        return %s
+                    }
+                )
+            """
+        ) % (
+            ", ".join('"%s"' % m[1] for m in modules),
+            ", ".join('%s' % m[0] for m in modules),
+            ("\n".join(final)).strip(),
+            ("\n".join(exporters)).strip()
+        )
+    ).strip() + "\n"
 
 
 def fix_file(src, dst):
-    pass
+    if src == "-":
+        src = sys.stdin.read()
+    else:
+        src = open(src, "rt").read()
+
+    content = fixit(src)
+
+    if dst == "-":
+        sys.stdout.write(content)
+    else:
+        dstf = open(dst, "w+")
+        dstf.write(content)
+        dstf.close()
 
 
 def fix_dir(src, dst):
-    pass
+    if not isdir(dst):
+        os.makedirs(dst)
+    for root, dirs, files in os.walk(src):
+        for fname in files:
+            ffname = join(root, fname)
+            dfname = join(dst, root[len(src)+1:], fname)
+            if fname.endswith(".js"):
+                fix_file(ffname, dfname)
+            else:
+                copy2(ffname, dfname)
+        for dname in dirs:
+            dfname = join(dst, root[len(src)+1:], dname)
+            if not isdir(dfname):
+                os.makedirs()
